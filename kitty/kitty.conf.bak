@@ -1,0 +1,83 @@
+# kitty.conf
+hide_window_decorations titlebar-only
+
+shell_integration enable
+shell_integration no-cursor
+# Nerd Fonts v3.1.0
+
+text_composition platform
+scrollback_lines 2000
+url_prefixes file ftp ftps gemini git gopher http https irc ircs kitty mailto news sftp ssh
+detect_urls yes
+select_by_word_characters @-./_~? &
+=%+#
+
+# enable true color support
+enable truecolor
+editor nano
+# General
+# font_family Blexmono Nerd Font
+font_size 12.0
+# bold_font auto
+# italic_font auto
+# bold_italic_font auto
+macos_use_core_text_rendering yes
+draw_bold_text_with_bright_colors yes
+adjust_line_height 0
+draw_ligatures yes
+disable_ligatures never
+font_spacing 0.0
+# font_features TT2020StyleB-Regular -liga +calt
+text_composition_strategy platform
+
+cursor_shape block
+cursor_stop_blinking_after 0.1
+
+# Window
+window_padding_width 20
+window_padding_height 20
+
+# Transparency
+background_opacity 1.0
+inactive_opacity 0.0
+
+# Scrollbar
+scrollbar_width 10
+scrollbar_background #282A36
+scrollbar_thumb      #BD93F9
+
+# Tabs
+tab_bar_edge top
+tab_bar_style powerline
+tab_powerline_style slanted
+tab_activity_symbol 
+tab_title_max_length 30
+tab_title_template "{fmt.fg.red}{bell_symbol}{fmt.fg.tab} {index}: ({tab.active_oldest_exe}) {title} {activity_symbol}"
+
+# Bell
+visual_bell yes
+bell_on_tab yes
+bell_on_window yes
+
+# Copy and Paste
+clipboard_control keyboard
+
+# Key Bindings
+map normal j scroll_up
+map normal k scroll_down
+map normal J scroll_page_up
+map normal K scroll_page_down
+
+# BEGIN_KITTY_THEME
+# Apprentice
+include current-theme.conf
+# END_KITTY_THEME
+
+# BEGIN_KITTY_FONTS
+font_family family="JetBrainsMono Nerd Font Mono"
+bold_font auto
+italic_font auto
+bold_italic_font auto
+# END_KITTY_FONTS
+# Added by Gogh
+# include colors.conf

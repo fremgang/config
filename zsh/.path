@@ -1,0 +1,26 @@
+#!/bin/zsh
+
+export PATH="/opt/homebrew/bin:$PATH"
+source /Users/valium/.config/op/plugins.sh
+source ~/.config/op/plugins.sh
+export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
+export PATH="/opt/homebrew/lib/ruby/gems/3.3.0/bin:$PATH"
+export PATH="/Users/valium/.gem/ruby/3.3.0/bin:$PATH"
+
+export FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+export PATH="/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
+
+# source "$HOME/.config/LS_COLORS/lscolors.sh"
+source "/opt/homebrew/opt/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
+source "/opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+
+# Created by `pipx` on 2024-09-28 09:55:01
+export PATH="$PATH:/Users/valium/.local/bin"
+export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
+
+source /opt/homebrew/opt/chruby/share/chruby/auto.sh
+
+# Created by `pipx` on 2024-09-28 09:55:01
+export PATH="$PATH:/Users/valium/.local/bin"

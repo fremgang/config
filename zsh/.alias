@@ -1,0 +1,51 @@
+# ls/dir + colors
+alias ll='ls -lh -CF --color=always'
+alias la='ls -lAh -CF --color=always'
+alias lsa="ls -aG -CF --color=always"
+alias ldot='ls -ld .* -CF --color=always'
+alias ls="ls -la -CF --color=always"
+
+alias lt="dir -CF --color=always"
+
+# grep etc
+alias grep="grep --color"
+
+# kitty
+alias icat="kitty +kitten icat"
+
+# tar
+alias tarls="tar -tvf"
+alias untar="tar -xf"
+
+# find
+alias fd='find . -type d -name'
+alias ff='find . -type f -name'
+
+# print things
+alias print-fpath='for fp in $fpath; do echo $fp; done; unset fp'
+alias print-path='echo $PATH | tr ":" "\n"'
+alias print-functions='print -l ${(k)functions[(I)[^_]*]} | sort'
+
+# dotfiles
+: "${DOTFILES:=$HOME/.config}"
+alias dotf='cd "$DOTFILES"'
+alias dotfed='cd "$DOTFILES" && zed .'
+alias dotfl="cd \$DOTFILES/local"
+alias fconf=fdot
+alias zdot='cd $ZDOTDIR'
+
+# misc
+alias zshrc='${EDITOR:-vim} "${ZDOTDIR:-$HOME}"/.zshrc'
+alias zbench='for i in {1..10}; do /usr/bin/time zsh -lic exit; done'
+alias cls="clear && printf '\e[3J'"
+alias cd..="cd .."
+
+# mask built-ins with better defaults
+alias ping='ping -c 5'
+
+# bat
+# in your .bashrc/.zshrc/*rc
+alias bathelp='bat --plain --language=help'
+help() {
+    "$@" --help 2>&1 | bathelp
+}
