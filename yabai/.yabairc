@@ -1,1 +1,117 @@
-/Users/valium/.yabairc
+#!/usr/bin/env sh
+
+#
+# for this to work you must configure sudo such that
+# it will be able to run the command without password
+#
+# see this wiki page for information:
+#  - https://github.com/koekeishiya/yabai/wiki/Installing-yabai-(latest-release)#configure-scripting-addition
+#
+# Function definitions
+adjust_spaces() {
+  local desired_spaces=("$@")
+  local display=1
+  for desired_space in "${desired_spaces[@]}"; do
+    local actual_space=$(yabai -m query --spaces | jq 'map(select(.display == '$display')) | length')
+    yabai -m display --focus $display
+    while (( actual_space != desired_space )); do
+      if (( actual_space < desired_space )); then
+        yabai -m space --create
+        ((actual_space++))
+      else
+        local last_space_index=$(yabai -m query --spaces | jq '.[].index | select(. == '$spaces_on_display')')
+        yabai -m space --focus $last_space_index
+        yabai -m space --destroy
+        ((actual_space--))
+      fi
+    done
+    ((display++))
+  done
+}
+
+setup_space() {
+  local idx="$1"
+  local name="$2"
+  yabai -m space "$idx" --label "$name"
+}
+
+yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
+sudo yabai --load-sa
+
+#borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=5.0 &
+yabai -m signal --add event=window_focused action="sketchybar --trigger window_focus"
+yabai -m signal --add event=window_created action="sketchybar --trigger windows_on_spaces"
+yabai -m signal --add event=window_destroyed action="sketchybar --trigger windows_on_spaces"
+
+# global settings
+yabai -m config                                 \
+    external_bar                 all:40:0       \
+    menubar_opacity              1.0            \
+    mouse_follows_focus          off            \
+    focus_follows_mouse          off            \
+    display_arrangement_order    default        \
+    window_origin_display        default        \
+    window_placement             second_child   \
+    window_zoom_persist          on             \
+    window_shadow                on             \
+    window_animation_duration    0.0            \
+    window_animation_easing      ease_out_circ  \
+    window_opacity_duration      0.15           \
+    active_window_opacity        1.0            \
+    normal_window_opacity        0.90           \
+    window_opacity               off            \
+    insert_feedback_color        0xff9dd274     \
+    split_ratio                  0.50           \
+    split_type                   auto           \
+    auto_balance                 off            \
+    top_padding                  5              \
+    bottom_padding               12             \
+    left_padding                 15             \
+    right_padding                15             \
+    window_gap                   15             \
+    layout                       bsp            \
+    mouse_modifier               fn             \
+    mouse_action1                move           \
+    mouse_action2                resize         \
+    mouse_drop_action            swap
+
+# Spaces adjustment
+num_displays=$(yabai -m query --displays | jq 'length')
+if [[ "$num_displays" -eq 3 ]]; then
+    adjust_spaces 3 3 4
+elif [[ "$num_displays" -eq 2 ]]; then
+    adjust_spaces 5 5
+elif [[ "$num_displays" -eq 1 ]]; then
+    adjust_spaces 6
+fi
+
+# Spaces setup
+setup_space 1 browser
+
+setup_space 3 terminal
+setup_space 4 Code
+setup_space 6 Todo
+
+# Apps to spaces rules
+yabai -m rule --add app="^Arc$" space=^1 opacity=1.0
+yabai -m rule --add app="^kitty$" space=^3
+yabai -m rule --add app="^Code$" space=^4
+yabai -m rule --add app="^Microsoft To Do$" space=^6
+
+# Open apps
+open -a "/Applications/Arc.app"
+open -a "/Applications/kitty.app"
+open -a "/Applications/Visual Studio Code.app"
+open -a "/Applications/Microsoft To Do.app"
+
+yabai -m rule --add app="^(Messages|1Password|Calculator|Software Update|Alacritty|WezTerm|VLC|System Preferences|System Settings|Citrix Viewer|Webmed|zoom.us|Photo Booth|Archive Utility|Python|App Store|Steam|Alfred|Activity Monitor)$" manage=off
+yabai -m rule --add label="Safari" app="^Safari$" title="^(General|(Tab|Password|Website|Extension)s|AutoFill|Se(arch|curity)|Privacy|Advance)$" manage=off
+yabai -m rule --add label="About This Mac" app="System Information" title="About This Mac" manage=off
+# yabai -m rule --add label="Little Arc" app="^Arc$" title="^Space.*" manage=off #grid=6:4:1:1:2:4
+yabai -m rule --add label="Finder" app="^Finder$" manage=off
+yabai -m rule --add label="About This Mac" app="System Information" title="About This Mac" manage=off
+yabai -m rule --add label="Messages" app="Messages$" manage=off grid=6:4:1:1:2:4
+yabai -m rule --add label="alacritty" app="Alacritty$" manage=off grid=6:4:1:1:2:4 opacity=1.0
+yabai -m rule --add label="WezTerm" app="WezTerm$" manage=off grid=6:4:1:1:2:4 opacity=1.0
+
+echo "yabai configuration loaded.."
